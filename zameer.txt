@@ -1,0 +1,27 @@
+Local repository is where version controlling happens and the files
+are called as commited files
+
+
+==========================================================================
+1 To initilise the working dir as a git repo
+  git init
+  This will create a hidden folder called .git where
+  it will store all configurations for git to work
+
+2 To send a file into from working dir to stagging area
+  git add filename
+  To send multiple files
+  git add file1 file2 file3
+  To send all files
+  git add .
+  . represents current working dir
+
+3 To bring files from stagging area to working dir
+  git rm --cached filename
+  (or)
+  git reset filename
+
+4 To send files from stagging area to local repository
+  git commit -m "Some msg"
+
+5 To check the status of working dir and stagging area files
