@@ -1,8 +1,106 @@
-To see if you already have Git installed, open up your terminal application.
+ class course
+    {
+        public int Id { get; set; }
+        public string CourseName { get; set; }
+        public decimal Price { get; set; }
+    }
+    class StudentTrainig
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public List<course> Courses { get; set; }
+    }
 
-If you're on a Mac, look for a command prompt application called "Terminal".
-If you're on a Windows machine, open the windows command prompt or "Git Bash".
-Once you've opened your terminal application, type git version. The output will either tell you which version of Git is installed, or it will alert you that git is an unknown command. If it's an unknown command, read further and find out how to install Git.
+    internal class datajson2
+    {
+        private string _path = @"C:\Users\mahes\source\repos\project8\project8\json1.json";
+        private List<StudentTrainig> students;
 
-Install Git Using GitHub Desktop
-Installing GitHub Desktop will also install the latest version of Git if you don't already have it. With GitHub Desktop, you get a command line version of Git with a robust GUI. Regardless of if you have Git installed or not, GitHub Desktop offers a simple collaboration tool for Git. You can learn more here.
+        //Newtonsoft .Json
+        public List<StudentTrainig> usingWithNewtonSoftJson()
+        {
+            using StreamReader reader = new(_path);
+            var Json = reader.ReadToEnd();
+            List<StudentTrainig> students = JsonConvert.DeserializeObject<List<StudentTrainig>>(Json);
+            return students;
+        }
+
+        //using jsonserializer from newtonsoft.Json
+
+        public List<StudentTrainig> usingJsonTextReaderInNewtonJson()
+        {
+            var serializer = new Newtonsoft.Json.JsonSerializer();
+            List<StudentTrainig> students = new List<StudentTrainig>();
+
+            //streamReader sr= New StreamReader(_path);
+            //JsonReader jr= new jsonTextReader(sr);
+            //students = serializer.deserializer<list<studentstraining>>(jr);
+            //jr.close
+            //sr.close
+
+            using (var StreamReader = new StreamReader(_path))
+            {
+                using (var TextReader = new JsonTextReader(StreamReader))
+                {
+                    students = serializer.Deserialize<List<StudentTrainig>>(TextReader);
+                }
+            }
+            return students;
+        }
+        //USING Jarray from Newtonsoft.Json
+        public List<StudentTrainig> usingJArrayParseInNewtonSoftJson()
+        {
+            using StreamReader reader = new(_path);
+            var json = reader.ReadToEnd();
+            var jarray = JArray.Parse(json);
+            List<StudentTrainig> students = new List<StudentTrainig>();
+            foreach (var item in jarray)
+            {
+                StudentTrainig student = item.ToObject<StudentTrainig>();
+                students.Add(student);
+            }
+            return students;
+        }
+        //using system .Text.Json.Json serializer
+        private readonly JsonSerializerOptions _Options = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        public List<StudentTrainig> usingFileReadAllTextWithSystemTextJson()
+        {
+            try
+            {
+                var json = File.ReadAllText(_path);
+                var students = System.Text.Json.JsonSerializer.Deserialize<List<StudentTrainig>>(json, _Options);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return students;
+        }
+        static void Main(string[] args)
+        {
+            datajson2 obj = new datajson2();
+            var data=obj.usingWithNewtonSoftJson();
+            var data1=obj.usingJsonTextReaderInNewtonJson();
+            var data2 = obj.usingJArrayParseInNewtonSoftJson();
+            var data3=obj.usingFileReadAllTextWithSystemTextJson();
+            foreach(var item in data)
+            {
+                Console.WriteLine("student id:" + item.Id);
+                Console.WriteLine("first name :" + item.FirstName);
+                Console.WriteLine("last name is :"+item.LastName);
+                Console.WriteLine("courses Joined are.......");
+                foreach(var course in item.Courses)
+                {
+                    Console.WriteLine("\tcourse Id :"+course.Id);
+                    Console.WriteLine("\tcourse name:" + course.CourseName);
+                    Console.WriteLine("\tcourse price:" + course.Price);
+                }
+                Console.WriteLine("\n");
+            }
+        }
+    }
