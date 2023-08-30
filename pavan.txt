@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <script>
+        //ITERATING an object in js
+
+        let empObj={
+            firstName:"mahesh",
+            lastName:'sai',
+            age:21,
+            mobile:'7993669175'
+        };
+        console.log(empObj)            
+        console.log(Object.entries(empObj));  //if we keep object.entries in console when it will print properties in array type
+        for(const key in empObj){
+            console.log (key,empObj[key]);
+        }
+        for(const item of Object.entries(empObj)){
+            console.log (item[0],item[1])
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
